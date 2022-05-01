@@ -2,14 +2,12 @@
 #include "mux.h"
 #include "config.h"
 #include <SPI.h>
-
 uint8_t leds0[NUM_LEDS / 8]; // each set of brightness
 uint8_t leds1[NUM_LEDS / 8]; // each set of brightness
 uint8_t leds2[NUM_LEDS / 8]; // each set of brightness
 uint8_t leds3[NUM_LEDS / 8]; // each set of brightness
 IntervalTimer myTimer;
-
-
+int counter;
 #if USING_SAMD
 void TimerHandler0(void) {
 #else 
@@ -18,7 +16,7 @@ void TimerHandler0(void) {
 void Refresh(){
 
 #endif
-
+    
     static uint8_t layer = 0;
     static uint8_t it = 1;
     digitalWrite(BLANK_PIN, 1);//The first thing we do is turn all of the LEDs OFF, by writing a 1 to the blank pin
@@ -79,6 +77,8 @@ void Refresh(){
     digitalWrite(LATCH_PIN, 1);//Latch pin HIGH
     digitalWrite(LATCH_PIN, 0);//Latch pin LOW
     digitalWrite(BLANK_PIN, 0);//blank pin LOW
+    //counter++;
+    //Serial.println(counter);
 }
 
 /*
@@ -91,7 +91,7 @@ void mux_init()
     //pinMode(BUTTONS_DATA, OUTPUT);
     //pinMode(BUTTONS_LATCH, OUTPUT);
     //pinMode(BUTTON_WATCH, INPUT);
-    //  pinMode(A7, INPUT);
+    pinMode(A7, INPUT);
     noInterrupts();
 #if ENABLE_DEBUG
 #endif
@@ -126,4 +126,8 @@ void mux_init()
     digitalWrite(SS,LOW);
 #endif
     interrupts();
+}
+
+void counter_check(){
+    Serial.println(counter);
 }
